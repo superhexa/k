@@ -54,16 +54,16 @@ export default function ChatWidget() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full glass-strong border-2 border-primary/50 shadow-2xl flex items-center justify-center text-primary hover:bg-primary/20 transition-all"
-          aria-label="Chat with AI"
+          aria-label="Chat with AI tutor"
         >
           <MessageCircle className="w-6 h-6" />
         </motion.button>
       </SheetTrigger>
-      <SheetContent side="right" className="p-0 w-[90vw] max-w-md glass-strong border-primary/30">
+      <SheetContent side="right" className="p-0 w-[90vw] max-w-md glass-strong border-primary/30" aria-describedby="chat-description">
         <div className="p-4 border-b border-border/50 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Bot className="w-5 h-5 text-primary" />
-            <h3 className="font-semibold text-foreground">Science AI Tutor</h3>
+            <h2 className="font-semibold text-foreground">Science AI Tutor</h2>
             {hasMessages && <Badge variant="secondary">{messages.length}</Badge>}
           </div>
         </div>
@@ -86,6 +86,7 @@ export default function ChatWidget() {
             </div>
           )}
         </ScrollArea>
+        <div id="chat-description" className="sr-only">Chat with an AI science tutor about chemistry and physics topics</div>
         <form onSubmit={sendMessage} className="p-4 border-t border-border/50 gap-2 flex">
           <Input
             value={input}
