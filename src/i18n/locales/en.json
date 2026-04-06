@@ -579,5 +579,24 @@
     "brand": {
       "tagline": "Science through Innovation and Excellence"
     }
+  },
+  "chat": {
+    "title": "Science AI Tutor",
+    "subtitle": "Chemistry & Physics Expert",
+    "openChat": "Open AI Tutor",
+    "welcome": "Welcome! 🧪",
+    "askAnything": "Ask me anything about Chemistry or Physics!",
+    "suggestionChemistry": "Explain electron configuration",
+    "suggestionPhysics": "How does projectile motion work?",
+    "suggestionFormula": "What's the ideal gas law?",
+    "placeholder": "Type your question here...",
+    "thinking": "Thinking...",
+    "charactersRemaining": "{{remaining}} characters remaining",
+    "description": "Ask questions about chemistry, physics, and how to use the UN Lab tools",
+    "error": "Oops! Something went wrong",
+    "errorMessage": "Failed to get response from tutor",
+    "errorDescription": "Please try again or check your internet connection",
+    "copySuccess": "Response copied to clipboard!",
+    "clearChat": "Clear Chat"
   }
 }

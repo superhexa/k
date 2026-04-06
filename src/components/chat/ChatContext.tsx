@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import { generateChemPhysicsResponse } from '@/lib/google-ai';
 import { useToast } from '@/components/ui/use-toast';
-import { MessageCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 type Message = {
   id: string;
@@ -11,7 +11,8 @@ type Message = {
 
 type Action = 
   | { type: 'ADD_MESSAGE'; payload: Message }
-  | { type: 'SET_LOADING'; payload: boolean };
+  | { type: 'SET_LOADING'; payload: boolean }
+  | { type: 'CLEAR_CHAT' };
 
 const ChatContext = createContext<any>(null);
 
@@ -21,6 +22,8 @@ const chatReducer = (state: any, action: Action) => {
       return { ...state, messages: [...state.messages, action.payload], loading: false };
     case 'SET_LOADING':
       return { ...state, loading: action.payload };
+    case 'CLEAR_CHAT':
+      return { ...state, messages: [], loading: false };
     default:
       return state;
   }
@@ -29,12 +32,7 @@ const chatReducer = (state: any, action: Action) => {
 export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(chatReducer, { messages: [], loading: false });
   const { toast } = useToast();
-
-  useEffect(() => {
-    if (state.messages.length > 0 && state.messages[state.messages.length - 1].role === 'user' && !state.loading) {
-      handleSend(state.messages[state.messages.length - 1].content);
-    }
-  }, []);
+  const { t } = useTranslation();
 
   const addMessage = (role: Message['role'], content: string) => {
     const id = Date.now().toString();
@@ -49,14 +47,17 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     if (response) {
       addMessage('assistant', response);
     } else {
-      addMessage('assistant', 'API key missing or error. Check console and .env');
-      toast({ variant: 'destructive', title: 'AI Error', description: 'Set OPENROUTER_API_KEY in Vercel or VITE_OPENROUTER_API_KEY locally' });
+      addMessage('assistant', t('chat.errorMessage', 'Sorry, I encountered an error. Please try again.'));
+      toast({ 
+        variant: 'destructive', 
+        title: t('chat.error', 'AI Error'), 
+        description: t('chat.errorDescription', 'Could not connect to the AI service. Please check your settings.')
+      });
     }
   };
 
   const clearChat = () => {
-    dispatch({ type: 'ADD_MESSAGE', payload: { id: 'clear', role: 'assistant' as const, content: '' } }); // Hack to clear
-    // Better: add CLEAR_ALL action
+    dispatch({ type: 'CLEAR_CHAT' });
   };
 
   return (
@@ -71,4 +72,5 @@ export const useChat = () => {
   if (!context) throw new Error('useChat must be inside ChatProvider');
   return context;
 };
+
 
